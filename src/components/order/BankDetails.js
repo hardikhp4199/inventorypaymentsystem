@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 
-const AddBankDetailsForm = () => {
+const BankDetails = () => {
   const baseURL = process.env.REACT_APP_API_URL;
   const [bankDetails, setBankDetails] = useState([]);
   const [bankName, setBankName] = useState('');
@@ -157,12 +157,12 @@ const AddBankDetailsForm = () => {
               <tbody>
                 {filteredBankDetails.map(bank => (
                   <tr key={bank[0]}>
-                    <td>{bank[0]} {bank[1]}</td>
+                    <td>{bank[1]}</td>
                     <td>{bank[2]}</td>
                     <td>{bank[3]}</td>
                     <td>
                       <button className="btn btn-primary btn-sm" onClick={() => selectBankForEdit(bank)}><FontAwesomeIcon icon={faEdit} /></button>
-                      <button className="btn btn-danger btn-sm mx-2" onClick={() => handleDeleteBank(bank[0])}><FontAwesomeIcon icon={faTrashAlt} /></button>
+                      {/* <button className="btn btn-danger btn-sm mx-2" onClick={() => handleDeleteBank(bank[0])}><FontAwesomeIcon icon={faTrashAlt} /></button> */}
                     </td>
                   </tr>
                 ))}
@@ -175,4 +175,4 @@ const AddBankDetailsForm = () => {
   );
 };
 
-export default AddBankDetailsForm;
+export default BankDetails;

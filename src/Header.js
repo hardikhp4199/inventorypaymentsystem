@@ -28,9 +28,9 @@ const Header = ({ logoSrc }) => {
           <li className="nav-item">
             <Link className="nav-link" to="/place-order">Order</Link>
           </li>
-          <li className="nav-item">
+          {/* <li className="nav-item">
             <Link className="nav-link" to="/qr-code">QR Code</Link>
-          </li>
+          </li> */}
         </ul>
       </div>
     </nav>

@@ -1,4 +1,12 @@
+import React from 'react';
+import '../../css/HomeComponent.css';
+
 const HomeComponent = () => {
-  return <div><h1>Welcome to OrderManagement.</h1></div>;
+  return (
+    <div className="home-container">
+      <h1>Welcome to OrderManagement.</h1>
+    </div>
+  );
 };
+
 export default HomeComponent;

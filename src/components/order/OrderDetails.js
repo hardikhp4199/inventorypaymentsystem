@@ -4,7 +4,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye } from "@fortawesome/free-solid-svg-icons";
-import { Badge, Modal, Button, Table } from "react-bootstrap";
+import { Badge } from "react-bootstrap";
 
 const OrderDetails = () => {
   const baseURL = process.env.REACT_APP_API_URL;
@@ -16,8 +16,6 @@ const OrderDetails = () => {
   const [bankDetails, setBankDetails] = useState([]);
   const [supplierDetails, setSupplierDetails] = useState([]);
   const [selectedSupplierId, setSelectedSupplierId] = useState("");
-  const [selectedOrder, setSelectedOrder] = useState(null);
-  const [showOrderDetailsModal, setShowOrderDetailsModal] = useState(false);
 
   useEffect(() => {
     fetchProducts();
@@ -72,38 +70,6 @@ const OrderDetails = () => {
       toast.error("Error fetching products:", error);
     }
   };
-
-  // const fetchOrderNumbers = async () => {
-  //   try {
-  //     const response = await axios.get(`${baseURL}/api/order/details`);
-  //     const orderDetails = response.data.data;
-      
-  //     const productNamesArray = await Promise.all(orderDetails.map(async (order) => {
-  //       const productNames = await Promise.all(order.productIds.map(async (productId) => {
-  //         const productName = await fetchProductName(productId);
-  //         return productName;
-  //       }));
-  //       return productNames;
-  //     }));
-  
-  //     console.log(productNamesArray);
-  //   } catch (error) {
-  //     toast.error("Error fetching products:", error);
-  //   }
-  // };
-  
-  // Function to fetch product name by ID
-  const fetchProductName = async (productId) => {
-    try {
-      const response = await axios.get(`${baseURL}/api/product/${productId}`);
-      const productName = response.data.name; // Assuming product name is available in the response
-      return productName;
-    } catch (error) {
-      console.error("Error fetching product name:", error);
-      return null;
-    }
-  };
-  
 
   const fetchProducts = async () => {
     try {
@@ -168,7 +134,6 @@ const OrderDetails = () => {
     return true;
   };
 
-  
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -201,19 +166,13 @@ const OrderDetails = () => {
   );
 
   const handleClick = (routeName) => {
-    if (routeName === "bank") {
+    if (routeName == "bank") {
       navigate("/bank");
-    } else if (routeName === "supplier") {
+    } else if (routeName == "supplier") {
       navigate("/suppliers");
     } else {
       navigate("/products");
     }
-  };
-
-  // Function to handle click on "View Order Details" button
-  const handleViewOrderDetails = (order) => {
-    setSelectedOrder(order); // Set the selected order
-    setShowOrderDetailsModal(true); // Show the modal
   };
 
   return (
@@ -345,8 +304,11 @@ const OrderDetails = () => {
                         <tr>
                           <th>Order No</th>
                           <th>Order Date</th>
+                          {/* <th>Total Amount</th> */}
                           <th>Status</th>
                           <th>Supplier ID</th>
+                          <th>Product IDs</th>
+                          <th>Product Quantities</th>
                           <th>Actions</th>
                         </tr>
                       </thead>
@@ -355,23 +317,24 @@ const OrderDetails = () => {
                           <tr key={order.orderNo}>
                             <td>{order.orderNo}</td>
                             <td>{formatDate(order.orderDate)}</td>
+                            {/* <td>
+                              &#8377; {numberWithCommas(order.orderTotalAmount)}
+                            </td> */}
                             <td>
                               {order.orderStatus === "placed" ? (
                                 <Badge className="bg-warning">Placed</Badge>
-                              ) : order.orderStatus === "received" ? (
+                              ) : order.orderStatus == "received" ? (
                                 <Badge className="bg-success">Received</Badge>
                               ) : (
                                 <>{order.orderStatus}</>
                               )}
                             </td>
                             <td>{order.supplierId}</td>
+                            <td>{order.productIds.join(", ")}</td>
+                            <td>{order.productQtys.join(", ")}</td>
                             <td>
-                              <button
-                                className="btn btn-primary btn-sm"
-                                onClick={() => handleViewOrderDetails(order)}
-                              >
+                              <button className="btn btn-primary btn-sm">
                                 <FontAwesomeIcon icon={faEye} />
-                                <span className="ml-2">View Order Details</span>
                               </button>
                             </td>
                           </tr>
@@ -385,67 +348,6 @@ const OrderDetails = () => {
           </div>
         </div>
       </div>
-
-      {/* Modal for displaying order details */}
-      <Modal show={showOrderDetailsModal} onHide={() => setShowOrderDetailsModal(false)}>
-  <Modal.Header closeButton>
-    <Modal.Title>Order Details</Modal.Title>
-  </Modal.Header>
-  <Modal.Body>
-    {selectedOrder && (
-      <div>
-        <Table striped bordered hover>
-          <tbody>
-            <tr>
-              <td><strong>Order No:</strong></td>
-              <td>{selectedOrder.orderNo}</td>
-            </tr>
-            <tr>
-              <td><strong>Order Date:</strong></td>
-              <td>{formatDate(selectedOrder.orderDate)}</td>
-            </tr>
-            <tr>
-              <td><strong>Status:</strong></td>
-              <td>{selectedOrder.orderStatus}</td>
-            </tr>
-            <tr>
-              <td><strong>Supplier ID:</strong></td>
-              <td>{selectedOrder.supplierId}</td>
-            </tr>
-            <tr>
-              <td><strong>Products:</strong></td>
-              <td>
-                <Table striped bordered hover>
-                  <thead>
-                    <tr>
-                      <th>Product ID</th>
-                      <th>Quantity</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {selectedOrder.productIds.map((productId, index) => (
-                      <tr key={productId}>
-                        <td>{productId}</td>
-                        <td>{selectedOrder.productQtys[index]}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </Table>
-              </td>
-            </tr>
-          </tbody>
-        </Table>
-      </div>
-    )}
-  </Modal.Body>
-  <Modal.Footer>
-    <Button variant="secondary" onClick={() => setShowOrderDetailsModal(false)}>
-      Close
-    </Button>
-  </Modal.Footer>
-</Modal>
-
-
     </div>
   );
 };

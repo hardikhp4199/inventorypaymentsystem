@@ -4,7 +4,7 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Header from "./Header";
 import Footer from "./Footer";
-import AddBankDetailsForm from "./components/order/AddBankDetailsForm";
+import BankDetails from "./components/order/BankDetails";
 import ProductForm from "./components/order/ProductForm";
 import OrderForm from "./components/order/OrderForm";
 import Supplier from "./components/order/Supplier";
@@ -28,7 +28,7 @@ const App = () => {
               <Route path="/" element={<HomeComponent />} />
               <Route
                 path="/bank"
-                element={<AddBankDetailsForm />}
+                element={<BankDetails />}
               />
               <Route path="/suppliers" element={<Supplier />} />
               <Route path="/products" element={<ProductForm />} />
